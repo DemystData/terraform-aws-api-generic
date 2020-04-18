@@ -31,6 +31,11 @@ resource "aws_api_gateway_integration_response" "integration_response" {
     lookup(var.responses[count.index], "parameters", []),
     lookup(var.responses[count.index], "param_values", [])
   )
+
+  depends_on = [
+    aws_api_gateway_method.method,
+    aws_api_gateway_integration.integration
+  ]
 }
 
 resource "aws_api_gateway_method_response" "method_response" {
@@ -45,4 +50,9 @@ resource "aws_api_gateway_method_response" "method_response" {
     lookup(var.responses[count.index], "param_requires", [])
   )
   response_models = lookup(var.responses[count.index], "models", {})
+
+  depends_on = [
+    aws_api_gateway_method.method,
+    aws_api_gateway_integration.integration
+  ]
 }
