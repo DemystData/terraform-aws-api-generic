@@ -25,8 +25,12 @@ resource "aws_api_gateway_integration_response" "integration_response" {
   resource_id        = var.resource_id
   http_method        = aws_api_gateway_method.method.http_method
   status_code        = var.responses[count.index].status_code
-  selection_pattern  = var.responses[count.index].selection_pattern
-  response_templates = var.responses[count.index].templates
+  selection_pattern  = lookup(var.responses[count.index], "selection_pattern", null)
+  response_templates = lookup(var.responses[count.index], "templates", {})
+  response_parameters = zipmap(
+    lookup(var.responses[count.index], "parameters", []),
+    lookup(var.responses[count.index], "param_values", [])
+  )
 }
 
 resource "aws_api_gateway_method_response" "method_response" {
@@ -36,4 +40,9 @@ resource "aws_api_gateway_method_response" "method_response" {
   resource_id = var.resource_id
   http_method = aws_api_gateway_method.method.http_method
   status_code = var.responses[count.index].status_code
+  response_parameters = zipmap(
+    lookup(var.responses[count.index], "parameters", []),
+    lookup(var.responses[count.index], "param_requires", [])
+  )
+  response_models = lookup(var.responses[count.index], "models", {})
 }
