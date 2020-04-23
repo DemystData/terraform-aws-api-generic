@@ -1,3 +1,5 @@
+variable "name" {}
+
 variable "api_id" {
   description = "The ID of the associated REST API"
 }
@@ -29,13 +31,26 @@ variable "credentials" {
   description = "The credentials required for the integration."
 }
 
+variable "request_validator_id" {
+  description = "Request Validator Id"
+  default     = null
+}
+
 variable "authorization" {
   default     = "NONE"
+  description = "The type of authorization used for the method (NONE, CUSTOM, AWS_IAM, COGNITO_USER_POOLS)"
 }
 
 variable "method_request_parameters" {
   type        = map
   default     = {}
+  description = "(Optional) A map of request parameters (from the path, query string and headers) that should be passed to the integration. The boolean value indicates whether the parameter is required (true) or optional (false). "
+}
+
+variable "model" {
+  type        = string
+  default     = "Empty"
+  description = "Properties section of a mapping template"
 }
 
 variable "integration_request_parameters" {

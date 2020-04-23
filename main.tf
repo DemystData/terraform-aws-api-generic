@@ -4,6 +4,12 @@ resource "aws_api_gateway_method" "method" {
   http_method        = var.http_method
   authorization      = var.authorization
   request_parameters = var.method_request_parameters
+
+  request_validator_id = var.request_validator_id
+
+  request_models = {
+    "application/json" = var.model == "Empty" ? "Empty" : join("", aws_api_gateway_model.model.*.name)
+  }
 }
 
 resource "aws_api_gateway_integration" "integration" {
